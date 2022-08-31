@@ -1,0 +1,39 @@
+package org.drools.hackfest2022;
+
+unit BillUnitData;
+
+import org.drools.hackfest2022.model.*;
+
+rule OrangeGroceryPrice
+when
+    $i: /items[category == ItemCategory.GROCERY, shortdesc soundslike "Orange", price/weight > 1.52*1.10]
+then
+    alerts.add(new Alert($i, "Was item weighted correctly at the self-service station?"));
+end
+
+rule AppleGroceryPrice
+when
+    $i: /items[category == ItemCategory.GROCERY, shortdesc soundslike "Apple", price/weight > 1.69*1.10]
+then
+    alerts.add(new Alert($i, "Was item weighted correctly at the self-service station?"));
+end
+
+rule KiwiGroceryPrice
+when
+    $i: /items[category == ItemCategory.GROCERY, shortdesc soundslike "Kiwi", price/weight > 3.78*1.10]
+then
+    alerts.add(new Alert($i, "Was item weighted correctly at the self-service station?"));
+end
+
+rule ExpensiveItemMaybeScannedTwice
+when
+    $i: /items[price > 30.0, $iBarcode: barcode]
+    $j: /items[this != $i, barcode == $iBarcode]
+    not( /alerts[subject.barcode == $iBarcode] )
+then
+    alerts.add(new Alert($i, "Please check you haven't scanned this item more than once?"));
+end
+
+query Alert
+    $a: /alerts
+end
