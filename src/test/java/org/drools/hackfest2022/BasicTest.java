@@ -22,7 +22,7 @@ public class BasicTest {
     }
 
     @Test
-    public void testHelloEndpoint() {
+    public void testExpensiveGrocery() {
         Item item1 = new Item("barcode", "orange", ItemCategory.GROCERY, 45, 1);
         Item item2 = new Item("barcode", "orange", ItemCategory.GROCERY, 45, 1);
 
@@ -36,9 +36,27 @@ public class BasicTest {
           .extract().asString();
 
         System.out.println(response);
-
         assertTrue(response.contains("Was item weighted correctly at the self-service station?"));
-        assertTrue(response.contains("Please check you haven't scanned this item more than once?"));
+        assertTrue(response.contains("Please check you have not scanned this item more than once?"));
+    }
+
+    @Test
+    public void testWagyu() {
+        Item item1 = new Item("barcode", "wagyu", null, 45, 1);
+        Item item2 = new Item("barcode", "wagyu", null, 45, 1);
+
+        String response = given()
+          .body(Map.of("items", Arrays.asList(item1, item2)))
+          .contentType(ContentType.JSON)
+          .accept(ContentType.JSON)
+          .when().post("/alert")
+          .then()
+          .statusCode(200)
+          .extract().asString();
+
+        System.out.println(response);
+
+        assertTrue(response.contains("Please check you have not scanned this item more than once?"));
     }
 
 }

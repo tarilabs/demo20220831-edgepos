@@ -29,9 +29,9 @@ rule ExpensiveItemMaybeScannedTwice
 when
     $i: /items[price > 30.0, $iBarcode: barcode]
     $j: /items[this != $i, barcode == $iBarcode]
-    not( /alerts[subject.barcode == $iBarcode] )
+    not( /alerts[subject.barcode == $iBarcode, message == "Please check you have not scanned this item more than once?"] )
 then
-    alerts.add(new Alert($i, "Please check you haven't scanned this item more than once?"));
+    alerts.add(new Alert($i, "Please check you have not scanned this item more than once?"));
 end
 
 query Alert
