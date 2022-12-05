@@ -6,16 +6,21 @@ public class Item {
     private ItemCategory category;
     private double price;
     private double weight;
+    private String sn;
     
     public Item() {
         // empty constructor.
     }
     public Item(String barcode, String shortdesc, ItemCategory category, double price, double weight) {
+        this(barcode, shortdesc, category, price, weight, null);
+    }
+    public Item(String barcode, String shortdesc, ItemCategory category, double price, double weight, String sn) {
         this.barcode = barcode;
         this.shortdesc = shortdesc;
         this.category = category;
         this.price = price;
         this.weight = weight;
+        this.sn = sn;
     }
     public String getBarcode() {
         return barcode;
@@ -47,9 +52,15 @@ public class Item {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+    public String getSn() {
+        return sn;
+    }
+    public void setSn(String sn) {
+        this.sn = sn;
+    }
     @Override
     public String toString() {
-        return "Item [barcode=" + barcode + ", category=" + category + ", price=" + price + ", shortdesc=" + shortdesc
-                + ", weight=" + weight + "]";
+        return "Item [barcode=" + barcode + ", shortdesc=" + shortdesc + ", category=" + category + ", price=" + price
+                + ", weight=" + weight + ", sn=" + sn + "]";
     }
 }

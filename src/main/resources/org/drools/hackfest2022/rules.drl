@@ -4,6 +4,14 @@ unit BillUnitData;
 
 import org.drools.hackfest2022.model.*;
 
+rule RecordSNtoLoyaltyID
+when
+    $id: /loyaltyID
+    $i: /items[sn != null]
+then
+    logs.add("Item serial no.: "+$i.getSn()+" associated with Loyalty card ID: "+$id);
+end
+
 rule OrangeGroceryPrice
 when
     $i: /items[category == ItemCategory.GROCERY, shortdesc soundslike "Orange", price/weight > 1.52*1.10]

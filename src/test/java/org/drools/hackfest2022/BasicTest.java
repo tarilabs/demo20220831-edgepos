@@ -3,6 +3,8 @@ package org.drools.hackfest2022;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static org.hamcrest.CoreMatchers.*;
+
 import java.util.Arrays;
 import java.util.Map;
 
@@ -19,6 +21,20 @@ public class BasicTest {
 
     static {
       RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
+
+    @Test
+    public void testItemSNLoyaltyID() {
+        Item item1 = new Item("barcode", "fish", ItemCategory.GROCERY, 1.99, 1, "sn123");
+
+        given()
+          .body(Map.of("items", Arrays.asList(item1), "loyaltyID", "loyalty123"))
+          .contentType(ContentType.JSON)
+          .accept(ContentType.JSON)
+          .when().post("/bill")
+          .then()
+          .statusCode(200)
+          .body("logs", hasItem(containsString("Item serial no.: sn123 associated with Loyalty card ID: loyalty123")));
     }
 
     @Test

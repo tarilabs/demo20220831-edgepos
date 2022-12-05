@@ -3,6 +3,9 @@ package org.drools.hackfest2022.model;
 public class Alert {
     private Item subject;
     private String message;
+    public Alert() {
+        // empty constructor.
+    }
     public Alert(Item subject, String message) {
         this.subject = subject;
         this.message = message;
