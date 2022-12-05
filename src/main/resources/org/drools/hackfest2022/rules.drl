@@ -4,12 +4,38 @@ unit BillUnitData;
 
 import org.drools.hackfest2022.model.*;
 
+import function org.drools.hackfest2022.Utils.sum;
+
 rule RecordSNtoLoyaltyID
 when
     $id: /loyaltyID
     $i: /items[sn != null]
 then
-    logs.add("Item serial no.: "+$i.getSn()+" associated with Loyalty card ID: "+$id);
+    logs.add("Item '"+$i.getShortdesc()+"' serial no.: "+$i.getSn()+" associated with Loyalty card ID: "+$id);
+end
+
+rule RecordSNnoLoyaltyID
+when
+    not( /loyaltyID )
+    $i: /items[sn != null]
+then
+    alerts.add(new Alert($i, "Don't forget to scan your Loyalty card for additional customer service benefits."));
+end
+
+rule CouponOFF5
+when
+    exists( /coupons[ code == "OFF5" ] )
+    not( /coupons[ code != "OFF5"] ) // not cumulable with other discounts
+    accumulate( /items[$p: price]; $subtotal: sum($p); $subtotal >= 50 )
+then
+    discount.set(-Math.round(($subtotal * 0.05) * 100.0) / 100.0);
+end
+
+rule CheckID
+when
+    $i: /items[category == ItemCategory.ALCOHOL || category == ItemCategory.TOBACCO]
+then
+    alerts.add(new Alert($i, "Need to show ID to merchant before checkout."));
 end
 
 rule OrangeGroceryPrice
@@ -40,6 +66,15 @@ when
     not( /alerts[subject.barcode == $iBarcode, message == "Please check you have not scanned this item more than once?"] )
 then
     alerts.add(new Alert($i, "Please check you have not scanned this item more than once?"));
+end
+
+rule ComputeTOTAL
+when
+    accumulate( /items[$p: price]; $sub: sum($p) )
+    $discount: /discount
+then
+    subtotal.set($sub);
+    total.set(sum($sub, $discount));
 end
 
 query Alert

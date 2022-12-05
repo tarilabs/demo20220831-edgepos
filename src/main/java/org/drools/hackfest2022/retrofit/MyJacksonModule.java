@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.ruleunits.api.DataObserver;
+import org.kie.kogito.drools.core.data.FieldDataStore;
 import org.kie.kogito.drools.core.data.ListDataStore;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -28,12 +29,26 @@ public class MyJacksonModule extends SimpleModule {
         }
     }
 
+    public static class RetrofitFieldDataStoreDeserializer extends StdSerializer<FieldDataStore<?>> {
+        RetrofitFieldDataStoreDeserializer(TypeFactory typeFactory) {
+            super(typeFactory.constructParametricType(FieldDataStore.class, TypeFactory.unknownType()));
+        }
+
+        @Override
+        public void serialize(FieldDataStore<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            List<Object> results = new ArrayList<>();
+            value.subscribe(DataObserver.of(results::add));
+            gen.writeObject(results.get(0));
+        }
+    }
+
     public MyJacksonModule(TypeFactory typeFactory) {
         addDefaultSerializers(typeFactory);
     }
 
     private void addDefaultSerializers(TypeFactory typeFactory) {
         addSerializer(new RetrofitListDataStoreDeserializer(typeFactory));
+        addSerializer(new RetrofitFieldDataStoreDeserializer(typeFactory));
     }
 
     /*
