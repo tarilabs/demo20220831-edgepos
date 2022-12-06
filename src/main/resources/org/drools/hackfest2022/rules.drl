@@ -5,6 +5,7 @@ unit BillUnitData;
 import org.drools.hackfest2022.model.*;
 
 import function org.drools.hackfest2022.Utils.sum;
+import function org.drools.hackfest2022.Utils.round;
 
 rule RecordSNtoLoyaltyID
 when
@@ -28,7 +29,7 @@ when
     not( /coupons[ code != "OFF5"] ) // not cumulable with other discounts
     accumulate( /items[$p: price]; $subtotal: sum($p); $subtotal >= 50 )
 then
-    discount.set(-Math.round(($subtotal * 0.05) * 100.0) / 100.0);
+    discount.set( -round($subtotal * 0.05, 2) );
 end
 
 rule CheckID
