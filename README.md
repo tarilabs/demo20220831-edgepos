@@ -8,6 +8,12 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 
 used https://code.quarkus.redhat.com/?g=org.drools.hackfest2022&a=demo20220831-edgepos&e=resteasy-jackson&e=smallrye-openapi&e=kubernetes&e=container-image-jib&e=org.kie.kogito%3Akogito-quarkus-rules&extension-search=origin:platform%20DRL
 
+pushing to Quay.io with
+
+```
+mvn clean install install -Dquarkus.container-image.push=true
+```
+
 <!--
 ## Running the application in dev mode
 
