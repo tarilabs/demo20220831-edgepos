@@ -14,6 +14,17 @@ pushing to Quay.io with
 mvn clean install install -Dquarkus.container-image.push=true
 ```
 
+## Quick start
+
+Install podman and ensure date(time) is setup correctly, then launch this application from a container image from quary registry
+
+```sh
+sudo apt-get install podman
+date
+podman pull quay.io/mmortari/demo20220831-edgepos:1.0.0-SNAPSHOT
+podman run -i --rm -p 8080:8080 quay.io/mmortari/demo20220831-edgepos:1.0.0-SNAPSHOT
+```
+
 <!--
 ## Running the application in dev mode
 
