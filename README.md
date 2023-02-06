@@ -16,11 +16,29 @@ mvn clean install install -Dquarkus.container-image.push=true
 
 ## Quick start
 
-Install podman and ensure date(time) is setup correctly, then launch this application from a container image from quary registry
+Install podman and ensure date(time) is setup correctly:
+
+**Fedora**:
+
+typically Podman is already installed, in case:
+
+```sh
+sudo dnf install podman
+date
+```
+
+**Debian-based**:
 
 ```sh
 sudo apt-get install podman
 date
+```
+
+**Launch application**:
+
+Then, launch this Drools+Quarkus application from a container image from quay.io registry
+
+```sh
 podman pull quay.io/mmortari/demo20220831-edgepos:1.0.0-SNAPSHOT
 podman run -i --rm -p 8080:8080 quay.io/mmortari/demo20220831-edgepos:1.0.0-SNAPSHOT
 ```
