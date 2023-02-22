@@ -1,0 +1,34 @@
+---
+- name: Configure devices
+  hosts: all
+  tasks:
+  - name: podman-auto-update.service
+    ansible.builtin.systemd:
+      name: podman-auto-update.service
+      enabled: true
+  - name: Create directory if it does not exist
+    ansible.builtin.file:
+      path: ~/.config/systemd/user
+      state: directory
+  - name: Copy file app1.service
+    ansible.builtin.copy:
+      src: "{{ playbook_dir }}/systemd/app1.service"
+      dest: ~/.config/systemd/user/app1.service
+  - name: Enable and start app1.service
+    ansible.builtin.systemd:
+      daemon_reload: true
+      name: app1.service
+      enabled: true
+      state: started
+      scope: user
+  - name: Copy file gui.service
+    ansible.builtin.copy:
+      src: "{{ playbook_dir }}/systemd/gui.service"
+      dest: ~/.config/systemd/user/gui.service
+  - name: Enable and start gui.service
+    ansible.builtin.systemd:
+      daemon_reload: true
+      name: gui.service
+      enabled: true
+      state: started
+      scope: user

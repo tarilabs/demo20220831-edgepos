@@ -38,3 +38,6 @@ nb-configuration.xml
 
 # Local environment
 .env
+
+# Ansible file specific to running the developer notes, not portable.
+inventory/hosts

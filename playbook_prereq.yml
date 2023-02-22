@@ -1,0 +1,13 @@
+---
+- name: Update devices
+  hosts: all
+  become: true
+  tasks:
+  - name: Check podman is installed
+    ansible.builtin.package:
+      name: podman
+      state: present
+  - name: Check firefox is installed (used for POS GUI)
+    ansible.builtin.package:
+      name: firefox
+      state: present
